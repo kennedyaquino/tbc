@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PrismaClient } from '@prisma/client';
+import { MemberDto } from "../dto/MemberDto";
 
 const prisma = new PrismaClient()
 
@@ -10,7 +11,7 @@ export default {
 
         const date = new Date(birthday)
 
-        const member = await prisma.member.create({
+        await prisma.member.create({
             data: {
                 name,
                 birthday: date,
@@ -18,37 +19,38 @@ export default {
                 street,
                 district,
                 city,
-                state   
+                state
             }
         })
 
-        return res.status(201).json(member)
+        return res.status(201).json()
     },
 
     async findById(req: Request, res: Response) {
         const id = parseInt(req.params.id)
-        
+
         const member = await prisma.member.findUnique({
             where: {
                 id
             }
         })
 
-        if(member == null) {
-            return res.status(404).json({ error: `Not found id: ${id}`})
+        if (member == null) {
+            return res.status(404).json({ message: `Not found id: ${id}` })
         } else {
-            return res.json(member)
+            return res.json(new MemberDto(member))
         }
-        
+
     },
 
     async findAll(req: Request, res: Response) {
         const members = await prisma.member.findMany()
 
-        return res.json(members)
-    },
+        const membersDto = members.map(member => new MemberDto(member))
 
-    
+        return res.json(membersDto)
+
+    },
 
     async findAllByName(req: Request, res: Response) {
         const name = req.params.name
@@ -61,7 +63,9 @@ export default {
             }
         })
 
-        return res.json(members)
+        const membersDto = members.map(member => new MemberDto(member))
+
+        return res.json(membersDto)
     },
 
     async deleteById(req: Request, res: Response) {
@@ -76,7 +80,7 @@ export default {
 
             return res.status(200).json()
         } catch (err) {
-            return res.status(404).json({ error: `Not found id: ${id}`})
+            return res.status(404).json({ message: `Not found id: ${id}` })
         }
     }
 }

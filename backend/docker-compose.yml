@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+  postgres:
+    image: mysql:latest
+    container_name: mysql-tbc
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'TBC'
+      MYSQL_ROOT_PASSWORD: '12345'
+    volumes:
+      - my-db:/var/lib/mysql
+    ports:
+      - '3306:3306'
+volumes:
+  my-db:

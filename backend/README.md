@@ -22,12 +22,17 @@ docker compose up -d
 DATABASE_URL="mysql://root:12345@localhost:3306/TBC"
 ```
 
-4. Após subir o container digite o comando abaixo na linha de comando para executar as migrate do prisma no banco de dados:
+4. Instale as dependências da api:
+```
+npm install
+```
+
+5. Execute as migrate do prisma no banco de dados:
 ```
 npx prisma migrate dev
 ```
 
-5. Então instale as dependências com ```npm install``` e inicie a api com ```npm run dev``` e acesse os endpoints pela rota: ```http://localhost:3333/```
+6. Inicie a api com ```npm run dev``` e acesse os endpoints pela rota: ```http://localhost:3333/```
 
 ### Endpoints
 
